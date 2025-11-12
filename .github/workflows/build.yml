@@ -1,34 +1,30 @@
-name: Moosewala295 Godot Android Build 🎮
+name: Build Godot Android APK
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
-    name: Build Godot Android APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install Godot 4.2.1
-        run: |
-          wget https://downloads.tuxfamily.org/godotengine/4.2.1/Godot_v4.2.1-stable_linux.x86_64.zip
-          unzip Godot_v4.2.1-stable_linux.x86_64.zip
-          mv Godot_v4.2.1-stable_linux.x86_64 /usr/local/bin/godot
-          chmod +x /usr/local/bin/godot
+    - name: Setup Godot
+      uses: josephbmanley/setup-godot@v2
+      with:
+        version: "4.2.1"
+        export-templates: true
 
-      - name: Build Game for Android
-        run: |
-          mkdir -p Builds
-          godot --headless --export-release "Android" "Builds/Moosewala295.apk" || true
-          echo "🔥 Powered by Surinder Sallan | Moosewala295 Game | Punjab Vibes 💥"
+    - name: Build Android APK
+      run: |
+        mkdir -p build/android
+        godot --headless --export-release "Android" build/android/Moosewala295.apk
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Moosewala295-APK
-          path: Builds/Moosewala295.apk
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: Moosewala295-Android
+        path: build/android/Moosewala295.apk
